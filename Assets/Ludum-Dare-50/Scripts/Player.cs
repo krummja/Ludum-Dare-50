@@ -12,12 +12,30 @@ public class Player : MonoBehaviour
 
     public float MoveSpeed = 1f;
 
-    private Vector2 moveInput;
+    public void TryMove(Vector2 target)
+    {
+        if ( Vector2.Distance(transform.position, MovePoint.position) <= 0.001f )
+        {
+            if ( Mathf.Abs(target.x) == 1f || Mathf.Abs(target.y) == 1f )
+            {
+                Vector3 pos = MovePoint.position + new Vector3(target.x, target.y, 0f);
+                if ( Physics2D.OverlapCircle(pos, 0.2f, MovableMask) )
+                {
+                    Collider2D collider = Physics2D.OverlapCircle(pos, 0.2f, MovableMask);
+                    Movable movable = collider.gameObject.GetComponent<Movable>();
+
+                }
+                else if ( !Physics2D.OverlapCircle(pos, 0.2f, StopMovementMask) )
+                {
+                    MovePoint.position += new Vector3(target.x, target.y, 0f);
+                }
+            }
+        }
+    }
 
     private void Awake()
     {
         MovePoint.parent = null;
-        moveInput = InputManager.Instance.Inputs.MoveInput;
     }
 
     private void Update()
@@ -27,22 +45,6 @@ public class Player : MonoBehaviour
             MovePoint.position,
             MoveSpeed * Time.fixedDeltaTime
         );
-
-        if ( Vector2.Distance(transform.position, MovePoint.position) <= 0.001f )
-        {
-            // TODO Play around with tweening and snappiness calibration.
-            moveInput = InputManager.Instance.Inputs.MoveInput;
-            if ( Mathf.Abs(moveInput.x) == 1f )
-            {
-                if ( !Physics2D.OverlapCircle(MovePoint.position + new Vector3(moveInput.x, 0f, 0f), 0.2f, StopMovementMask) )
-                    MovePoint.position += new Vector3(moveInput.x, 0f, 0f);
-            }
-            else if ( Mathf.Abs(moveInput.y) == 1f )
-            {
-                if ( !Physics2D.OverlapCircle(MovePoint.position + new Vector3(0f, moveInput.y, 0f), 0.2f, StopMovementMask) )
-                    MovePoint.position += new Vector3(0f, moveInput.y, 0f);
-            }
-        }
     }
 
     private void OnDrawGizmos()

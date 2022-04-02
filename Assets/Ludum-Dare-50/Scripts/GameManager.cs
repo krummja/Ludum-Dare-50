@@ -5,15 +5,11 @@ public class GameManager : BaseManager<GameManager>
 {
     public Player Player;
 
-    public AudioClip MainMusic;
-
     private void Update()
     {
-
+        PlayerCharacterInputs inputs = InputManager.Instance.Inputs;
+        Player.TryMove(inputs.MoveInput);
     }
 
-    protected override void OnAwake()
-    {
-
-    }
+    protected override void OnAwake() {}
 }

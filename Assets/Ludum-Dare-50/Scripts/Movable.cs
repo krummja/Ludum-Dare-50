@@ -22,11 +22,6 @@ public class Movable : MonoBehaviour
             MovePoint.position,
             MoveSpeed * Time.fixedDeltaTime
         );
-
-        if ( Vector2.Distance(transform.position, MovePoint.position) <= 0.001f )
-        {
-
-        }
     }
 
     private void OnDrawGizmos()
