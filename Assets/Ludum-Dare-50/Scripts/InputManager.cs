@@ -10,31 +10,23 @@ public struct PlayerCharacterInputs
 }
 
 
-public class InputManager : MonoBehaviour
+public class InputManager : BaseManager<InputManager>
 {
-    public static InputManager Instance;
-
     [HideInInspector]
     public PlayerCharacterInputs Inputs;
 
     private MasterInput inputAction;
     private InputAction moveInput;
 
-    private void Awake()
+    protected override void OnAwake()
     {
-        if ( Instance != null ) Destroy(gameObject);
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-
         Inputs = new PlayerCharacterInputs();
 
         inputAction = new MasterInput();
         moveInput = inputAction.PlayerController.Movement;
 
         moveInput.performed += OnMoveInput;
+        // TODO Can I add other callbacks here, for sound and such?
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
