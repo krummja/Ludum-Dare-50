@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
                     Collider2D collider = Physics2D.OverlapCircle(pos, 0.2f, MovableMask);
                     Movable movable = collider.gameObject.GetComponent<Movable>();
 
+                    movable.TryMove(target);
                 }
                 else if ( !Physics2D.OverlapCircle(pos, 0.2f, StopMovementMask) )
                 {

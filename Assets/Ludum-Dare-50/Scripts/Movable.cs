@@ -7,8 +7,24 @@ public class Movable : MonoBehaviour
 {
     public Transform MovePoint;
     public LayerMask StopMovementMask;
+    public LayerMask ButtonMask;
 
     public float MoveSpeed = 1f;
+
+    public void TryMove(Vector2 target)
+    {
+        if ( Vector2.Distance(transform.position, MovePoint.position) <= 0.001f )
+        {
+            if ( Mathf.Abs(target.x) == 1f || Mathf.Abs(target.y) == 1f )
+            {
+                Vector3 pos = MovePoint.position + new Vector3(target.x, target.y, 0f);
+                if ( !Physics2D.OverlapCircle(pos, 0.2f, StopMovementMask) )
+                {
+                    MovePoint.position += new Vector3(target.x, target.y, 0f);
+                }
+            }
+        }
+    }
 
     private void Awake()
     {

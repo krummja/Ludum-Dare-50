@@ -17,6 +17,7 @@ public class InputManager : BaseManager<InputManager>
 
     private MasterInput inputAction;
     private InputAction moveInput;
+    private bool pauseInput = true;
 
     protected override void OnAwake()
     {
@@ -25,7 +26,7 @@ public class InputManager : BaseManager<InputManager>
         inputAction = new MasterInput();
         moveInput = inputAction.PlayerController.Movement;
 
-        moveInput.performed += OnMoveInput;
+        AddListenersToInput();
         // TODO Can I add other callbacks here, for sound and such?
     }
 
@@ -34,13 +35,25 @@ public class InputManager : BaseManager<InputManager>
         Inputs.MoveInput = context.ReadValue<Vector2>();
     }
 
+    private void AddListenersToInput()
+    {
+        moveInput.performed += OnMoveInput;
+    }
+
+    private void RemoveListenersFromInput()
+    {
+        moveInput.performed -= OnMoveInput;
+    }
+
     private void OnEnable()
     {
+        AddListenersToInput();
         inputAction.Enable();
     }
 
     private void OnDisable()
     {
+        RemoveListenersFromInput();
         inputAction.Disable();
     }
 }
