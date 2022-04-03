@@ -7,9 +7,10 @@ public class NewDayDialogue : MonoBehaviour
 {
 
     private SpriteRenderer backgroundSprite;
+    public SpriteRenderer whiteSprite;
     public TextMeshProUGUI dayText;
     public TextMeshProUGUI radioText;
-
+    public Transform notebook;
 
     string dayString = "";
     string radioString1 = "";
@@ -17,9 +18,10 @@ public class NewDayDialogue : MonoBehaviour
     string combinedRadio;
 
     private bool skip = false;
+    private bool skipped = false; // check to see if button was pressed 
 
 
-    public int day = 1; // Day of the week starting with sunday
+    public int day = Gamestate.day; // Day of the week starting with sunday
     public int disaster = 0; // What happened to close school today 0 - Nothing
 
     // Start is called before the first frame update
@@ -45,8 +47,8 @@ public class NewDayDialogue : MonoBehaviour
     void Update()
     {
 
-        skip = false;
-        // if (Input.GetButtonDown("Submit")) { skip = true; }
+        if (Input.anyKeyDown && skipped == false) { skip = true; skipped = true; }
+        if (Input.anyKeyDown == false && skipped == true) { skipped = false; }
 
     }
 
@@ -58,14 +60,14 @@ public class NewDayDialogue : MonoBehaviour
         //Fade In Day
         for (float alpha = 0f; alpha < 255; alpha += Time.deltaTime * 150f)
         {
-            if (skip == true) { alpha = 255; }
+            if (skip == true) { skip = false; alpha = 255; }
             dayText.color = new Color32((byte)(alpha), (byte)(alpha), (byte)(alpha), 1);
             yield return null;
 
         }
         for (float alpha = 0f; alpha < 255; alpha += Time.deltaTime * 250f)
         {
-            if (skip == true) { alpha = 255; }
+            if (skip == true) { skip = false; alpha = 255; }
             backgroundSprite.color = new Color(alpha / 255, alpha / 255, alpha / 255, 1);
             yield return null;
             
@@ -77,12 +79,13 @@ public class NewDayDialogue : MonoBehaviour
         for (float alpha = 0f; alpha < 255; alpha += Time.deltaTime * 200f)
         {
             if (alpha > 255) { alpha = 255; }
-            if (skip == true) { alpha = 255; }
+            if (skip == true) { skip = false; alpha = 255; }
                 backgroundSprite.color = new Color((350 - (alpha))/ 255, (350 - (alpha)) / 255, (350 - (alpha)) / 255, 1); // don't look. It's too horrible
             dayText.color = new Color32((byte)(255-alpha), (byte)(255 - alpha), (byte)(255 - alpha), (byte)((255-alpha)/255));
             yield return null;
 
         }
+        dayText.text = ""; //clear text to prevent ghosting after fade out
 
         //Create Radio String
 
@@ -133,10 +136,43 @@ public class NewDayDialogue : MonoBehaviour
         {
             if (skip == true) {
                 radioText.text = combinedRadio;
+                skip = false;
                 break; 
             }
             radioText.text += c;
-            yield return new WaitForSeconds(0.075f);
+            yield return new WaitForSeconds(0.055f);
+        }
+
+        while (!skip) //wait for key press
+            yield return null;
+
+        skip = false;
+
+        //Fade out radio text and scroll in notebook
+        for (float alpha = 0f; alpha < 255; alpha += Time.deltaTime * 200f)
+        {
+            if (alpha > 255) { alpha = 255; }
+            if (skip == true) { skip = false; alpha = 255; }
+            notebook.position = new Vector3(0, -12 + ((alpha / 255) * 12), 0);
+            radioText.color = new Color32((byte)(255 - alpha), (byte)(255 - alpha), (byte)(255 - alpha), (byte)((255 - alpha) / 255));
+            yield return null;
+
+        }
+        radioText.text = ""; //clear text to prevent ghosting after fade out
+
+        while (!skip) //wait for key press
+            yield return null;
+        skip = false;
+
+        //Fade to white
+        for (float alpha = 0f; alpha < 255; alpha += Time.deltaTime * 200f)
+        {
+            if (alpha > 255) { alpha = 255; } 
+            
+            whiteSprite.color = new Color(1, 1, 1, (alpha/255));
+
+            yield return null;
+
         }
     }
 }
