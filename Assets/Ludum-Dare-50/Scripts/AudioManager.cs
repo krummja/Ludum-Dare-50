@@ -7,26 +7,34 @@ public class AudioManager : BaseManager<AudioManager>
 {
     public Dictionary<string, AudioClip> Music = new Dictionary<string, AudioClip>();
 
-    public AudioSource AudioSource { get; private set; }
+    public Dictionary<string, AudioClip> Sounds = new Dictionary<string, AudioClip>();
 
-    public void Play(string clipName)
+    public AudioSource MusicPlayer;
+    public AudioSource SoundsPlayer;
+
+    public void PlayMusic(string clipName)
     {
-        AudioSource.clip = Music[clipName];
-        AudioSource.Play();
+        MusicPlayer.clip = Music[clipName];
+        MusicPlayer.Play();
+    }
+
+    public void PlaySound(string clipName)
+    {
+        if ( SoundsPlayer.isPlaying ) return;
+        SoundsPlayer.clip = Sounds[clipName];
+        SoundsPlayer.Play();
     }
 
     public void Stop()
     {
-        AudioSource.Stop();
+        MusicPlayer.Stop();
+        SoundsPlayer.Stop();
     }
 
-    protected override void OnAwake()
-    {
-        AudioSource = GetComponent<AudioSource>();
-    }
+    protected override void OnAwake() {}
 
     private void Start()
     {
-        Play("SummerSong");
+        PlayMusic("SummerSong");
     }
 }
