@@ -8,5 +8,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Ludum-Dare-50/_Levels/Frontend/BootScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/LoganPublic/TestLevels/RadioScene.unity
+    guid: 0442258040606d546af7f88ab419973b
+  - enabled: 1
+    path: Assets/LoganPublic/TestLevels/GameLogicTest.unity
+    guid: 94b7dd1d4790b91429eb39a286f399f9
+  - enabled: 1
+    path: Assets/LoganPublic/TestLevels/EndOfDay.unity
+    guid: 392a9f2ebc4d2fa49aae88e433e16a40
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 8110828b0eafea06d99a67a1566e3797, type: 2}

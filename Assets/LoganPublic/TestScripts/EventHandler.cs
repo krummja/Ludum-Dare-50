@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class EventHandler : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class EventHandler : MonoBehaviour
         {
 
 
-            Gamestate.initialized = false;
+            Gamestate.initialized = true;
 
             //Inventory
             for (int i = 0; i < 15; i++) {
@@ -558,7 +559,81 @@ public class EventHandler : MonoBehaviour
         return false;
     }
 
-
+    public void EndDay(int activity)
+    {
+        if (GamePause == true) return; //no function while paused
+        if (activity == 0)
+        {
+            Gamestate.accomplishment = 0;
+            StartCoroutine(FadeOut());
+        }
+        if (activity == 1)
+        {
+            if (Gamestate.beach == true)
+            {
+                if (GamePause == false) StartCoroutine(NewMessage(18, "the beach is closed today."));
+                return;
+            }
+            Gamestate.accomplishment = 1;
+            Gamestate.beach = true;
+            StartCoroutine(FadeOut());
+        }
+        if (activity == 2)
+        {
+            if (Gamestate.iceCream == true)
+            {
+                if (GamePause == false) StartCoroutine(NewMessage(18, "you're not in the mood for ice cream today."));
+                return;
+            }
+            Gamestate.accomplishment = 2;
+            Gamestate.iceCream = true;
+            StartCoroutine(FadeOut());
+        }
+        if (activity == 3)
+        {
+            if (Gamestate.movie == true)
+            {
+                if (GamePause == false) StartCoroutine(NewMessage(18, "you have already seen everything that's playing."));
+                return;
+            }
+            Gamestate.accomplishment = 3;
+            Gamestate.movie = true;
+            StartCoroutine(FadeOut());
+        }
+        if (activity == 4)
+        {
+            if (Gamestate.baseball == true)
+            {
+                if (GamePause == false) StartCoroutine(NewMessage(18, "There are no games planned for today."));
+                return;
+            }
+            Gamestate.accomplishment = 4;
+            Gamestate.baseball = true;
+            StartCoroutine(FadeOut());
+        }
+        if (activity == 5)
+        {
+            if (Gamestate.videoGames == true)
+            {
+                if (GamePause == false) StartCoroutine(NewMessage(18, "you're not in the mood to play video games today."));
+                return;
+            }
+            Gamestate.accomplishment = 5;
+            Gamestate.videoGames = true;
+            StartCoroutine(FadeOut());
+        }
+        if (activity == 6)
+        {
+            if (Gamestate.bicycle == true)
+            {
+                if (GamePause == false) StartCoroutine(NewMessage(18, "you're not in the mood to ride your bike today."));
+                return;
+            }
+            Gamestate.accomplishment = 6;
+            Gamestate.bicycle = true;
+            StartCoroutine(FadeOut());
+        }
+    }
 
     IEnumerator NewMessage(int icon, string message)
     {
@@ -606,7 +681,7 @@ public class EventHandler : MonoBehaviour
 
         }
 
-        whiteSprite.enabled = false;
+        SceneManager.LoadScene(3);
     }
 
 }
