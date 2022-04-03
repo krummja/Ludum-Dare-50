@@ -26,12 +26,18 @@ public class Player : MonoBehaviour
                     Movable movable = collider.gameObject.GetComponent<Movable>();
 
                     Animator.SetKickState(target);
+                    AudioManager.Instance.PlaySound("Kick");
                     movable.TryMove(target);
                 }
                 else if ( !Physics2D.OverlapCircle(pos, 0.2f, StopMovementMask) )
                 {
+                    GameManager.Instance.DecrementMoves();
                     Animator.SetDashState(target);
                     MovePoint.position += new Vector3(target.x, target.y, 0f);
+                }
+                else
+                {
+                    return;
                 }
             }
         }

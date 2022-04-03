@@ -20,6 +20,7 @@ public class Movable : MonoBehaviour
                 Vector3 pos = MovePoint.position + new Vector3(target.x, target.y, 0f);
                 if ( !Physics2D.OverlapCircle(pos, 0.2f, StopMovementMask) )
                 {
+                    GameManager.Instance.DecrementMoves();
                     MovePoint.position += new Vector3(target.x, target.y, 0f);
                 }
             }

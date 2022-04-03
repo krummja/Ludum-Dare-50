@@ -15,19 +15,26 @@ public class InputManager : BaseManager<InputManager>
     [HideInInspector]
     public PlayerCharacterInputs Inputs;
 
-    private MasterInput inputAction;
+    private MasterInput masterInput;
     private InputAction moveInput;
-    private bool pauseInput = true;
+    private InputAction downArrow;
+    private bool pauseInput = false;
+
+    private Keyboard keyboard = Keyboard.current;
+
+    public void ToggleInput()
+    {
+        pauseInput = !pauseInput;
+    }
 
     protected override void OnAwake()
     {
         Inputs = new PlayerCharacterInputs();
 
-        inputAction = new MasterInput();
-        moveInput = inputAction.PlayerController.Movement;
+        masterInput = new MasterInput();
+        moveInput = masterInput.PlayerController.Movement;
 
         AddListenersToInput();
-        // TODO Can I add other callbacks here, for sound and such?
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)
@@ -48,12 +55,12 @@ public class InputManager : BaseManager<InputManager>
     private void OnEnable()
     {
         AddListenersToInput();
-        inputAction.Enable();
+        masterInput.Enable();
     }
 
     private void OnDisable()
     {
         RemoveListenersFromInput();
-        inputAction.Disable();
+        masterInput.Disable();
     }
 }
