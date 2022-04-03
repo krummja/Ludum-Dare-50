@@ -9,7 +9,9 @@ public class NewDayDialogue : MonoBehaviour
     private SpriteRenderer backgroundSprite;
     public TextMeshProUGUI dayText;
     public TextMeshProUGUI radioText;
-    
+
+
+    string dayString = "";
     string radioString1 = "";
     string radioString2 = "";
     string combinedRadio;
@@ -23,7 +25,17 @@ public class NewDayDialogue : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        backgroundSprite = gameObject.GetComponent<SpriteRenderer>();
+        if (day == 1) { dayString = "Sunday"; }
+        if (day == 2) { dayString = "Monday"; }
+        if (day == 3) { dayString = "Tuesday"; }
+        if (day == 4) { dayString = "Wednesday"; }
+        if (day == 5) { dayString = "Thursday"; }
+        if (day == 6) { dayString = "Friday"; }
+        if (day == 7) { dayString = "Saturday"; }
+
+        dayText.text = dayString;
+
+    backgroundSprite = gameObject.GetComponent<SpriteRenderer>();
         backgroundSprite.color = new Color(0, 0, 0, 1);
         dayText.color = new Color32(0, 0, 0, 1);
         StartCoroutine(DayFade());
@@ -67,7 +79,7 @@ public class NewDayDialogue : MonoBehaviour
             if (alpha > 255) { alpha = 255; }
             if (skip == true) { alpha = 255; }
                 backgroundSprite.color = new Color((350 - (alpha))/ 255, (350 - (alpha)) / 255, (350 - (alpha)) / 255, 1); // don't look. It's too horrible
-            dayText.color = new Color32((byte)(255-alpha), (byte)(255 - alpha), (byte)(255 - alpha), 1);
+            dayText.color = new Color32((byte)(255-alpha), (byte)(255 - alpha), (byte)(255 - alpha), (byte)((255-alpha)/255));
             yield return null;
 
         }
@@ -78,8 +90,8 @@ public class NewDayDialogue : MonoBehaviour
             radioString1 =
         "Good morning listeners! \n \n " +
         "The skies are clear and it is a beautiful Sunday morning. \n \n " +
-        "Coming up this week: Monday will mark the first day back at school for all the young students out there.\n \n " +
-        "That's right, folks, it's the final day of summer vaction. \n \n Make it count.";
+        "Coming up this week: Monday will mark the first day back to school for all the young students in our city.\n \n " +
+        "That's right, folks, it's the final day of summer vaction. \n \n Make the most of it.";
         }
         
         if (day == 2) { radioString1 = ""; }
