@@ -53,7 +53,7 @@ MonoBehaviour:
   ButtonMask:
     serializedVersion: 2
     m_Bits: 256
-  MoveSpeed: 1
+  MoveSpeed: 5
 --- !u!61 &7837696734966641006
 BoxCollider2D:
   m_ObjectHideFlags: 0

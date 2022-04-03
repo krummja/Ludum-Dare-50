@@ -31,7 +31,7 @@ public class Movable : MonoBehaviour
         MovePoint.parent = null;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         transform.position = Vector2.MoveTowards(
             transform.position,

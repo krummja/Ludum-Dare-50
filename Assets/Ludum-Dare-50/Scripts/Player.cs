@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public LayerMask StopMovementMask;
     public LayerMask MovableMask;
     public LayerMask ButtonMask;
+    public SpriteAnimator Animator;
 
     public float MoveSpeed = 1f;
 
@@ -28,6 +29,7 @@ public class Player : MonoBehaviour
                 }
                 else if ( !Physics2D.OverlapCircle(pos, 0.2f, StopMovementMask) )
                 {
+                    Animator.SetDashState(target);
                     MovePoint.position += new Vector3(target.x, target.y, 0f);
                 }
             }
@@ -39,13 +41,16 @@ public class Player : MonoBehaviour
         MovePoint.parent = null;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         transform.position = Vector2.MoveTowards(
             transform.position,
             MovePoint.position,
             MoveSpeed * Time.fixedDeltaTime
         );
+
+        if ( Vector2.Distance(transform.position, MovePoint.position) < 0.05f )
+            Animator.SetIdleState();
     }
 
     private void OnDrawGizmos()
