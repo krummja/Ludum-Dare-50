@@ -9,16 +9,7 @@ public class InventorySlot : MonoBehaviour
     public SpriteRenderer icon;
     public SpriteRenderer background;
 
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         int i = slot-1;
             if (Gamestate.inventory[i] == 0)

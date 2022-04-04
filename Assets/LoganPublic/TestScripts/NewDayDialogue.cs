@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class NewDayDialogue : MonoBehaviour
 {
-
     public SpriteRenderer crossBike;
     public SpriteRenderer crossGames;
     public SpriteRenderer crossBaseball;
@@ -20,21 +19,20 @@ public class NewDayDialogue : MonoBehaviour
     public TextMeshProUGUI radioText;
     public Transform notebook;
 
-    string dayString = "";
-    string radioString1 = "";
-    string radioString2 = "";
-    string combinedRadio;
-
-    private bool skip = false;
-    private bool skipped = false; // check to see if button was pressed 
-
-    private int nextScene = 2;
-
     public int day; // Day of the week starting with sunday
     public int disaster = 0; // What happened to close school today 0 - Nothing
 
-    // Start is called before the first frame update
-    void Start()
+    private string dayString = "";
+    private string radioString1 = "";
+    private string radioString2 = "";
+    private string combinedRadio;
+
+    private bool skip = false;
+    private bool skipped = false; // check to see if button was pressed
+
+    private int nextScene = 2;
+
+    private void Start()
     {
         day = Gamestate.day;
         disaster = Gamestate.disaster;
@@ -62,20 +60,14 @@ public class NewDayDialogue : MonoBehaviour
         StartCoroutine(DayFade());
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
         if (Input.anyKeyDown && skipped == false) { skip = true; skipped = true; }
         if (Input.anyKeyDown == false && skipped == true) { skipped = false; }
-
     }
 
     IEnumerator DayFade()
     {
-
-
-
         //Fade In Day
         for (float alpha = 0f; alpha < 255; alpha += Time.deltaTime * 150f)
         {
@@ -104,7 +96,6 @@ public class NewDayDialogue : MonoBehaviour
             yield return null;
 
         }
-       
 
         //Create Radio String
 
@@ -154,7 +145,7 @@ public class NewDayDialogue : MonoBehaviour
         if (disaster == 2) { radioString2 = "In the news this morning, a local school is dealing with a clean up after the building's fire sprinklers were triggered yesterday. The official start of classes for Valley Ridge School will be delayed until tomorrow;"; }
         if (disaster == 3) { radioString2 = "A breaking story today: Valley Ridge School is once again unable to open its doors for students due to unsolved electrical issues."; }
         if (disaster == 4) { radioString2 = "An important announcement today: The faculty of Valley Ridge School has decided to ask students to come to school on Saturday to make up for lost time. Unfortunately today they are having trouble unlocking certain classrooms and so the first day of classes has been delayed once again."; }
-        if (day == 6 && Gamestate.scienceBakingSoda == true && Gamestate.scienceChemical == true && Gamestate.scienceFan == true && Gamestate.scienceFanCase == true && Gamestate.scienceRefridgerant == true && Gamestate.scienceWater == true)
+        if (day == 6 && Gamestate.scienceBakingSoda == true && Gamestate.scienceChemical == true && Gamestate.scienceFan == true && Gamestate.scienceFanCase == true && Gamestate.scienceRefrigerant == true && Gamestate.scienceWater == true)
         {
             radioString2 =
             "I'm sure I'm not the only one who couldn't believe my eyes this morning. \n \n " +

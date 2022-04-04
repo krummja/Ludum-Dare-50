@@ -6,17 +6,17 @@ using UnityEngine.SceneManagement;
 
 public class EndOfDay : MonoBehaviour
 {
-    public SpriteRenderer whiteSprite;
-    public TextMeshProUGUI dayText;
+    public SpriteRenderer WhiteSprite;
+    public TextMeshProUGUI DayText;
 
-    string dayString = "";
-    string typedDayString = "";
+    private string dayString = "";
+    private string typedDayString = "";
 
     private bool skip = false;
     private bool skipped = false; // check to see if button was pressed 
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         if (Gamestate.accomplishment == 1) { dayString = "You spend the rest of the day swimming and relaxing at the beach."; }
         if (Gamestate.accomplishment == 2) { dayString = "You spend the rest of the day eating ice cream and hanging out with your friends."; }
@@ -32,15 +32,22 @@ public class EndOfDay : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
 
-        if (Input.anyKeyDown && skipped == false) { skip = true; skipped = true; }
-        if (Input.anyKeyDown == false && skipped == true) { skipped = false; }
+        if ( Input.anyKeyDown && skipped == false )
+        {
+            skip = true;
+            skipped = true;
+        }
 
+        if ( skipped )
+        {
+            skipped = false;
+        }
     }
 
-    IEnumerator ShowResults()
+    private IEnumerator ShowResults()
     {
 
         foreach (char c in dayString)
@@ -48,12 +55,12 @@ public class EndOfDay : MonoBehaviour
             if (skip == true)
             {
                 typedDayString = dayString;
-                dayText.text = typedDayString;
+                DayText.text = typedDayString;
                 skip = false;
                 break;
             }
             typedDayString += c;
-            dayText.text = typedDayString;
+            DayText.text = typedDayString;
             yield return new WaitForSeconds(0.055f);
         }
 
@@ -62,19 +69,24 @@ public class EndOfDay : MonoBehaviour
 
 
         //Fade to black
-        whiteSprite.enabled = true;
+        WhiteSprite.enabled = true;
         for (float alpha = 0f; alpha < 255; alpha += Time.deltaTime * 200f)
         {
             if (alpha > 255) { alpha = 255; }
 
-            whiteSprite.color = new Color(0, 0, 0, (alpha / 255));
+            WhiteSprite.color = new Color(0, 0, 0, (alpha / 255));
 
             yield return null;
 
         }
 
+        // 0: BootScene
+        // 1: RadioScene
+        // 2: GameLogicTest
+        // 3: EndOfDay
         Gamestate.day++;
-        if (Gamestate.accomplishment != 8 && Gamestate.accomplishment != 9) SceneManager.LoadScene(1);
 
+        if (Gamestate.accomplishment != 8 && Gamestate.accomplishment != 9)
+            SceneManager.LoadScene(1);
     }
 }

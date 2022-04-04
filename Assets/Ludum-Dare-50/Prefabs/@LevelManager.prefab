@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3166348149533931102
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3166348149533931100}
+  - component: {fileID: 3166348149533931101}
+  m_Layer: 0
+  m_Name: '@LevelManager'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3166348149533931100
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3166348149533931102}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3166348149533931101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3166348149533931102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 162b0c5302ce4d47ab04cb3a4cbb5f0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  BaseballField: {fileID: 4793406980495720829, guid: dd392d09af32e6d4d802278fb15b0c2c, type: 3}
+  OutsideSchool: {fileID: 6873187524293321881, guid: bf5347b80055d755b9c2d90bf872ebc3, type: 3}
+  Downtown: {fileID: 8485378177281074326, guid: 6b1d933d41b3e7601b50cf662053770f, type: 3}
+  Beach: {fileID: 1635349818269257702, guid: b9ad757232977708bbf7afaafe8e4062, type: 3}
+  UtilityRoom: {fileID: 5092004968840874534, guid: acabf6ce8a380bc56b9622e2f48fb2d6, type: 3}
+  ScienceRoom: {fileID: 1393156628666634444, guid: 498c1a9e52b25725aad7a86c149f4ebe, type: 3}
+  Player: {fileID: 0}
+  GUI: {fileID: 8649838418637350971, guid: a61e5e020a7b9fe7e8f30718a4a15df7, type: 3}

@@ -5,7 +5,6 @@ using UnityEngine;
 public static class Gamestate
 {
     //Roads? Where we're going. We don't need roads. 
-
     public static bool initialized = false;
 
     //Inventory
@@ -40,10 +39,8 @@ public static class Gamestate
     // some booleans to keep track of the experiment
     public static bool scienceFan = false;
     public static bool scienceFanCase = false;
-    public static bool scienceRefridgerant = false;
+    public static bool scienceRefrigerant = false;
     public static bool scienceBakingSoda = false;
     public static bool scienceChemical = false;
     public static bool scienceWater = false;
-
-
 }

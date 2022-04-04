@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class EventHandler : MonoBehaviour
 {
-
     public static EventHandler instance; // Singleton magic
 
     public TextMeshProUGUI dataLog;
@@ -21,15 +20,12 @@ public class EventHandler : MonoBehaviour
     public bool GamePause = false; // **************** You can watch this variable to determine input pause.
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-
         Gamestate.disaster = 0; // repair yesterday's disaster;
 
         if (Gamestate.initialized == false)
         {
-
-
             Gamestate.initialized = true;
 
             //Inventory
@@ -52,6 +48,7 @@ public class EventHandler : MonoBehaviour
         StartCoroutine(FadeIn());
 
     }
+
     public void AddScore(int num)
     {
         Gamestate.score = +num;
@@ -68,7 +65,7 @@ public class EventHandler : MonoBehaviour
     }
 
     // Update is called once per frame
-    public void Update()
+    private void Update()
     {
         dataLog.text =
             "Score: " + Gamestate.score + "  " +
@@ -92,7 +89,6 @@ public class EventHandler : MonoBehaviour
             }
             else if (GamePause == false) StartCoroutine(NewMessage(18, "You already have this!"));
         }
-        
         if (newItem == 2)//Fan Case
         {
             if (CheckInventory(newItem) == false)
@@ -102,7 +98,6 @@ public class EventHandler : MonoBehaviour
             }
             else if (GamePause == false) StartCoroutine(NewMessage(18, "You already have this!"));
         }
-
         if (newItem == 3)//Fan
         {
             if (CheckInventory(newItem) == false)
@@ -112,7 +107,6 @@ public class EventHandler : MonoBehaviour
             }
             else if (GamePause == false) StartCoroutine(NewMessage(18, "You already have this!"));
         }
-
         if (newItem == 4)//Refridge
         {
             if (CheckInventory(newItem) == false)
@@ -122,7 +116,6 @@ public class EventHandler : MonoBehaviour
             }
             else if (GamePause == false) StartCoroutine(NewMessage(18, "You don't need any more refridgerant"));
         }
-
         if (newItem == 5)//Water
         {
             if (CheckInventory(newItem) == false)
@@ -132,7 +125,6 @@ public class EventHandler : MonoBehaviour
             }
             else if (GamePause == false) StartCoroutine(NewMessage(18, "You're already carrying one huge bottle of water. Two would be too heavy!"));
         }
-
         if (newItem == 6)//Industrial Chemical
         {
             if (CheckInventory(newItem) == false)
@@ -424,7 +416,7 @@ public class EventHandler : MonoBehaviour
 
         if (planNumber == 8) // Fan
         {
-            if (Gamestate.scienceRefridgerant == true)
+            if (Gamestate.scienceRefrigerant == true)
             {
                 if (GamePause == false) StartCoroutine(NewMessage(18, "There is nothing more to do here."));
                 return;
@@ -434,7 +426,7 @@ public class EventHandler : MonoBehaviour
             {
                 if (GamePause == false) StartCoroutine(NewMessage(18, "you connect the canister of refridgerant to the experiment."));
                 RemoveFromInventory(4); // remove fridge
-                Gamestate.scienceRefridgerant = true;
+                Gamestate.scienceRefrigerant = true;
             }
             else
             {
@@ -508,7 +500,7 @@ public class EventHandler : MonoBehaviour
 
     }
 
-        void PlaceInInventory(int newItem) //This is the function that actually puts a new item into the array.
+    void PlaceInInventory(int newItem) //This is the function that actually puts a new item into the array.
     {
         for (int i = 0; i<15; i++)
         {
