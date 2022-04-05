@@ -4,6 +4,7 @@ namespace Gameplay
 {
     public enum GameItems
     {
+        NONE,
         SLINGSHOT,
         FAN_CASE,
         FAN,
@@ -14,8 +15,12 @@ namespace Gameplay
         GUM,
         KEY_PRESSING,
         KEY_CUT,
+        FUSE,
+        UNKNOWN_2,
         SMOKE_BOMB,
-        ROACHES
+        ROACHES_1,
+        ROACHES_2,
+        ROACHES_3
     }
 
     public class Inventory : BaseManager<Inventory>
@@ -24,21 +29,17 @@ namespace Gameplay
 
         public void AddToInventory(GameItems newItem)
         {
-            if ( GameManager.Instance.IsGamePaused ) return;
-
             if ( CheckInventory(newItem) ) ItemExists();
             else
             {
-                PlaceInInventory(newItem);
-
                 switch ( newItem )
                 {
                     case GameItems.SLINGSHOT:
                         GameManager.Instance.RequestNewMessage(1, "You found a slingshot!");
                         break;
-                    case GameItems.FAN_CASE:
-                        GameManager.Instance.RequestNewMessage(1, "You found a fan case!");
-                        break;
+                    // case GameItems.FAN_CASE:
+                    //     GameManager.Instance.RequestNewMessage(1, "You found a fan case!");
+                    //     break;
                     case GameItems.FAN:
                         GameManager.Instance.RequestNewMessage(1, "You found some fan blades!");
                         break;
@@ -63,10 +64,22 @@ namespace Gameplay
                     case GameItems.KEY_PRESSING:
                         break;
                     case GameItems.KEY_CUT:
+                        GameManager.Instance.RequestNewMessage(13, "You found a key stuck in the sand. You've seen " +
+                                                                   "this somewhere before...");
                         break;
-                    case GameItems.ROACHES:
+                    case GameItems.ROACHES_1:
+                        GameManager.Instance.RequestNewMessage(13, "You found a bunch of roaches! Yuck!");
+                        break;
+                    case GameItems.ROACHES_2:
+                        GameManager.Instance.RequestNewMessage(13, "You found a bunch of roaches! You added them to " +
+                                                                   "your collection...");
+                        break;
+                    case GameItems.ROACHES_3:
+                        GameManager.Instance.RequestNewMessage(13, "You found a bunch of roaches! A fine addition...");
                         break;
                 }
+
+                PlaceInInventory(newItem);
             }
         }
 
@@ -98,6 +111,35 @@ namespace Gameplay
 
                 InventorySlots[14] = 0;
             }
+        }
+
+        public void ClearInventory()
+        {
+            switch ( GameManager.Instance.Day )
+            {
+                case DaysEnum.SUNDAY:
+                    InventorySlots = new GameItems[15];
+                    break;
+                case DaysEnum.MONDAY:
+                    RemoveFromInventory(GameItems.SLINGSHOT);
+                    RemoveFromInventory(GameItems.ROACHES_2);
+                    break;
+                case DaysEnum.TUESDAY:
+                    RemoveFromInventory(GameItems.ROACHES_3);
+                    RemoveFromInventory(GameItems.GUM);
+                    RemoveFromInventory(GameItems.REFRIGERANT);
+                    break;
+                case DaysEnum.WEDNESDAY:
+                    RemoveFromInventory(GameItems.KEY_PRESSING);
+                    RemoveFromInventory(GameItems.WATER);
+                    break;
+                case DaysEnum.THURSDAY:
+                    RemoveFromInventory(GameItems.FAN);
+                    break;
+                case DaysEnum.FRIDAY:
+                    break;
+            }
+
         }
 
         protected override void OnAwake() {}

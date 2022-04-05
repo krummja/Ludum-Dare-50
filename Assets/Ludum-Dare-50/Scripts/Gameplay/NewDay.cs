@@ -62,27 +62,12 @@ namespace Gameplay
 
             DayText.text = dayString;
 
-            switch ( GameManager.Instance.Achievement )
-            {
-                case AchievementsEnum.BICYCLE:
-                    CrossBike.enabled = true;
-                    break;
-                case AchievementsEnum.VIDEO_GAMES:
-                    CrossGames.enabled = true;
-                    break;
-                case AchievementsEnum.BASEBALL:
-                    CrossBaseball.enabled = true;
-                    break;
-                case AchievementsEnum.MOVIE:
-                    CrossMovies.enabled = true;
-                    break;
-                case AchievementsEnum.ICE_CREAM:
-                    CrossIceCream.enabled = true;
-                    break;
-                case AchievementsEnum.BEACH:
-                    CrossBeach.enabled = true;
-                    break;
-            }
+            CrossBike.enabled = GameManager.Instance.Achievements.Bicycle;
+            CrossGames.enabled = GameManager.Instance.Achievements.VideoGames;
+            CrossBaseball.enabled = GameManager.Instance.Achievements.Baseball;
+            CrossMovies.enabled = GameManager.Instance.Achievements.Movie;
+            CrossIceCream.enabled = GameManager.Instance.Achievements.IceCream;
+            CrossBeach.enabled = GameManager.Instance.Achievements.Beach;
 
             background = GetComponent<SpriteRenderer>();
             background.color = new Color(0, 0, 0, 1);
@@ -196,29 +181,34 @@ namespace Gameplay
                 yield return null;
             }
 
+            // TODO Make sure this is the correct way we want to do this
             if ( GameManager.Instance.Achievement == AchievementsEnum.HOME
                  && GameManager.Instance.Day != DaysEnum.SUNDAY
                  || GameManager.Instance.Achievement == AchievementsEnum.SNOW_DAY )
             {
-                SceneManager.LoadScene(3);
+                SceneManager.LoadScene((int) ScenesEnum.END_OF_DAY_SCENE);
             }
             else
             {
                 switch ( GameManager.Instance.Day )
                 {
                     case DaysEnum.SUNDAY:
-                        LevelHandler.Instance.DayOne();
+                        LevelHandler.Instance.LoadBaseballScene();
                         break;
                     case DaysEnum.MONDAY:
-                        LevelHandler.Instance.DayTwo();
+                        LevelHandler.Instance.LoadOutsideScene();
                         break;
                     case DaysEnum.TUESDAY:
+                        LevelHandler.Instance.LoadDowntownScene();
                         break;
                     case DaysEnum.WEDNESDAY:
+                        LevelHandler.Instance.LoadBeachScene();
                         break;
                     case DaysEnum.THURSDAY:
+                        LevelHandler.Instance.LoadUtilityRoomScene();
                         break;
                     case DaysEnum.FRIDAY:
+                        LevelHandler.Instance.LoadScienceLabScene();
                         break;
                 }
             }
@@ -310,7 +300,8 @@ namespace Gameplay
             }
 
             if ( GameManager.Instance.Disaster == ClosureEnum.ROACHES )
-                return;
+                radioString2 = "As for Valley Ridge School... Well, it's not pretty, folks. Roaches. " +
+                               "It's roaches. Yeeeegh.";
             if ( GameManager.Instance.Disaster == ClosureEnum.PLUMBING )
                 radioString2 = "I do have one school closure to tell you about this morning. Apparently Valley " +
                                "Ridge School is dealing with some plumbing issues today and so the start of classes " +
@@ -329,7 +320,7 @@ namespace Gameplay
                                "classes has been delayed once again.";
 
             // Science!
-            if ( GameManager.Instance.Day == DaysEnum.FRIDAY )
+            if ( GameManager.Instance.Day == DaysEnum.SATURDAY )
             {
                 radioString2 =
                     "I'm sure I'm not the only one who couldn't believe my eyes this morning. \n \n " +

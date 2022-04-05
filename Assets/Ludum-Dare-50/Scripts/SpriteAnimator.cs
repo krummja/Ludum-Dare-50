@@ -23,16 +23,12 @@ public class SpriteAnimator : MonoBehaviour
 
     public void SetIdleState()
     {
-        IdleObject.SetActive(true);
-        DashObject.SetActive(false);
-        KickObject.SetActive(false);
+        State = AnimationState.IDLE;
     }
 
     public void SetDashState(Vector3 direction)
     {
-        IdleObject.SetActive(false);
-        DashObject.SetActive(true);
-        KickObject.SetActive(false);
+        State = AnimationState.DASH;
 
         GameObject dust = Instantiate(DustPrefab, transform);
         dust.GetComponent<Animator>().Play(0);
@@ -51,9 +47,7 @@ public class SpriteAnimator : MonoBehaviour
 
     public void SetKickState(Vector3 direction)
     {
-        IdleObject.SetActive(false);
-        DashObject.SetActive(false);
-        KickObject.SetActive(true);
+        State = AnimationState.KICK;
 
         if ( direction.x == -1f )
         {
@@ -65,8 +59,25 @@ public class SpriteAnimator : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Update()
     {
-        State = AnimationState.IDLE;
+        switch ( State )
+        {
+            case AnimationState.IDLE:
+                IdleObject.SetActive(true);
+                DashObject.SetActive(false);
+                KickObject.SetActive(false);
+                break;
+            case AnimationState.DASH:
+                IdleObject.SetActive(false);
+                DashObject.SetActive(true);
+                KickObject.SetActive(false);
+                break;
+            case AnimationState.KICK:
+                IdleObject.SetActive(false);
+                DashObject.SetActive(false);
+                KickObject.SetActive(true);
+                break;
+        }
     }
 }

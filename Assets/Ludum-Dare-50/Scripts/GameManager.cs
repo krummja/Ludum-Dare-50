@@ -38,20 +38,12 @@ public enum ClosureEnum
     ELECTRICAL,
     PLUMBING,
     KEYS,
-    SMOKE
+    SMOKE,
+    SCIENCE
 }
 
 
-public enum ScenesEnum
-{
-    BOOT,
-    RADIO,
-    GAME,
-    END
-}
-
-
-public sealed class AchievementFlags
+public class AchievementFlags
 {
     public bool Beach = false;
     public bool IceCream = false;
@@ -62,7 +54,7 @@ public sealed class AchievementFlags
 }
 
 
-public sealed class ShutdownFlags
+public class ShutdownFlags
 {
     public bool Roaches = false;
     public bool Electrical = false;
@@ -72,7 +64,7 @@ public sealed class ShutdownFlags
 }
 
 
-public sealed class ExperimentFlags
+public class ExperimentFlags
 {
     public bool Fan = false;
     public bool FanCase = false;
@@ -85,36 +77,37 @@ public sealed class ExperimentFlags
 
 public class GameManager : BaseManager<GameManager>
 {
-    public Transform LevelRoot;
+    [HideInInspector]
     public Player Player;
+
     public Clock Clock;
     public GameObject MessageObject;
-    public SpriteRenderer WhiteSprite;
 
     public GameItems[] InventorySlots;
-    public bool IsInitialized = false;
 
-    public AchievementFlags Achievements { get; private set; }
-    public ShutdownFlags Shutdowns { get; private set; }
-    public ExperimentFlags Experiment { get; private set; }
+    public AchievementFlags Achievements;
+    public ShutdownFlags Shutdowns;
+    public ExperimentFlags Experiment;
 
-    public AchievementsEnum Achievement { get; private set; }
-    public ScenesEnum Scene { get; private set; }
+    public AchievementsEnum Achievement;
 
-    public DaysEnum Day { get; set; }
-    public ClosureEnum Disaster { get; set; }
+    public DaysEnum Day;
+    public ClosureEnum Disaster;
+
 
     public int Score { get; private set; }
     public int LastDayHunted { get; private set; }
-    public bool IsGamePaused { get; set; }
+    public bool IsGamePaused;
 
+    private PlayerCharacterInputs Inputs;
     private int currentMoves = 10;
 
     private bool wasAnyKeyPressed = false;
+    private bool wasSpacePressed = false;
+    private bool isPopUpVisible = false;
+
     private bool isSkipped = false;
     private bool initialized = false;
-
-    private bool goalComplete = false;
 
     public void AddScore(int num)
     {
@@ -126,103 +119,127 @@ public class GameManager : BaseManager<GameManager>
         Achievement = achievement;
     }
 
-    public void Sabotage(int planNumber)
+    public void Sabotage(ClosureEnum planNumber)
     {
-        if ( IsGamePaused ) return;
-
         switch ( planNumber )
         {
-            case 1:     // PLUMBING
-                if ( Shutdowns.Plumbing )
-                {
-                    RequestNewMessage(18, "There is a water valve here, but it is stuck and cannot be turned.");
-                    break;
-                }
-
+            case ClosureEnum.PLUMBING:
                 RequestNewMessage(18, "You see the large valve that supplies the school with water. You turn it a few" +
                                       "times to stop the flow.");
-                Shutdowns.Plumbing = true;
                 Disaster = ClosureEnum.PLUMBING;
                 Achievement = AchievementsEnum.BASEBALL;
-                goalComplete = true;
+                Achievements.Baseball = true;
+                Shutdowns.Plumbing = true;
+                LevelHandler.Instance.Complete();
                 break;
 
-            case 2:     // SMOKE BOMB
-                if ( Shutdowns.Smoke )
+            case ClosureEnum.SMOKE:
+                bool haveSmokeBomb = Inventory.Instance.CheckInventory(GameItems.SMOKE_BOMB);
+                bool haveSlingshot = Inventory.Instance.CheckInventory(GameItems.SLINGSHOT);
+                if ( haveSmokeBomb && haveSlingshot )
                 {
-                    RequestNewMessage(18, "There is nothing more to do here.");
-                    break;
-                }
-
-                if ( Inventory.Instance.CheckInventory(GameItems.SMOKE_BOMB) )
-                {
-                    RequestNewMessage(18, "You toss your smoke bomb into the open window. You can see a cloud of " +
+                    RequestNewMessage(13, "You shoot your smoke bomb into the open window. You can see a cloud of " +
                                           "smoke starting to build inside the classroom!");
                     Inventory.Instance.RemoveFromInventory(GameItems.SMOKE_BOMB);
-                    Shutdowns.Smoke = true;
+                    Inventory.Instance.RemoveFromInventory(GameItems.SLINGSHOT);
                     Disaster = ClosureEnum.SMOKE;
+                    Achievement = AchievementsEnum.BICYCLE;
+                    Achievements.Bicycle = true;
+                    Shutdowns.Smoke = true;
+                    LevelHandler.Instance.Complete();
                 }
                 else
                 {
                     RequestNewMessage(18, "You see an open window about you. You can't reach it, but you might be " +
                                           "able to throw something into it...");
                 }
-
                 break;
 
-            case 3:     // ELECTRICAL
-                if ( Shutdowns.Electrical )
+            case ClosureEnum.ROACHES:
+                bool haveRoaches1 = Inventory.Instance.CheckInventory(GameItems.ROACHES_1);
+                bool haveRoaches2 = Inventory.Instance.CheckInventory(GameItems.ROACHES_1);
+                bool haveRoaches3 = Inventory.Instance.CheckInventory(GameItems.ROACHES_1);
+                if ( haveRoaches1 && haveRoaches2 && haveRoaches3 )
                 {
-                    RequestNewMessage(18, "There is nothing more to do here.");
-                    break;
+                    RequestNewMessage(16, "You sneak back to the school that night and release your horrible horde of" +
+                                          "highly horrifying bugs into the school lobby. Muahaha!");
+                    Inventory.Instance.RemoveFromInventory(GameItems.ROACHES_1);
+                    Inventory.Instance.RemoveFromInventory(GameItems.ROACHES_2);
+                    Inventory.Instance.RemoveFromInventory(GameItems.ROACHES_3);
+                    Disaster = ClosureEnum.ROACHES;
+                    Achievement = AchievementsEnum.ICE_CREAM;
+                    Achievements.IceCream = true;
+                    Shutdowns.Roaches = true;
+                    LevelHandler.Instance.Complete();
+                }
+                else
+                {
+                    RequestNewMessage(18, "You try to sneak back to the school that night to release what few roaches" +
+                                          "you collected, but they scattered away. The guard catches you.");
+                }
+                break;
+
+            case ClosureEnum.KEYS:
+                if ( Inventory.Instance.CheckInventory(GameItems.KEY_CUT) )
+                {
+                    RequestNewMessage(10, "You bury the key in the sand. No school if the doors can't be unlocked!");
+                    Inventory.Instance.RemoveFromInventory(GameItems.KEY_CUT);
+                    Disaster = ClosureEnum.KEYS;
+                    Achievement = AchievementsEnum.BEACH;
+                    Achievements.Beach = true;
+                    Shutdowns.Keys = true;
+                    LevelHandler.Instance.Complete();
+                }
+                else
+                {
+                    RequestNewMessage(18, "It's just a hole. You might be able to hide something valuable in here...");
+                }
+                break;
+
+            case ClosureEnum.ELECTRICAL:
+                RequestNewMessage(12, "You pull the fuse out of the fuse box. The lights flicker and shut off.");
+                Disaster = ClosureEnum.ELECTRICAL;
+                Achievement = AchievementsEnum.VIDEO_GAMES;
+                Achievements.VideoGames = true;
+                Shutdowns.Electrical = true;
+                LevelHandler.Instance.Complete();
+                break;
+
+            case ClosureEnum.SCIENCE:
+                // Check for all science items.
+                bool haveBakingSoda = Inventory.Instance.CheckInventory(GameItems.BAKING_SODA);
+                bool haveRefrigerant = Inventory.Instance.CheckInventory(GameItems.REFRIGERANT);
+                bool haveWaterBottle = Inventory.Instance.CheckInventory(GameItems.WATER);
+                bool haveOldFan = Inventory.Instance.CheckInventory(GameItems.FAN);
+                if ( haveBakingSoda && haveRefrigerant && haveWaterBottle && haveOldFan )
+                {
+                    RequestNewMessage(4, "You attach the fan, plugin the refrigerant, drain the bottle of water, and" +
+                                          "mix in the baking soda. It starts to bubble and shake... Better run!");
+                    Disaster = ClosureEnum.SCIENCE;
+                    Achievement = AchievementsEnum.SNOW_DAY;
+                    LevelHandler.Instance.Complete();
+                }
+                else
+                {
+                    RequestNewMessage(18, "Some nerd's science project is here. If only you had some sciency baubles " +
+                                          "to stick to it... that could be interesting.");
                 }
 
-                // Check for utility key.
-                break;
-
-            case 4:     // ROACHES
-                break;
-
-            case 5:     // HIT KEYS WITH SLINGSHOT
-                break;
-
-            case 6:     // FAN CASE
-                break;
-
-            case 7:     // FAN
-                break;
-
-            case 8:     // FAN
-                break;
-
-            case 9:     // PLUMBING
-                break;
-
-            case 10:    // CHEMICALS
-                break;
-
-            case 11:    // BAKING SODA
                 break;
         }
-    }
-
-    public void NextDay()
-    {
-        Day++;
-        goalComplete = false;
-        LevelHandler.Instance.NextLevel();
     }
 
     public void DecrementMoves()
     {
         currentMoves--;
-        if ( Clock )
-            Clock.UpdateClock(false);
+        Clock.UpdateClock(false);
     }
 
     public void RequestNewMessage(int icon, string message)
     {
-        StartCoroutine(NewMessage(icon, message));
+        NewMessage(icon, message);
+        isPopUpVisible = true;
+        wasSpacePressed = false;
     }
 
     protected override void OnAwake()
@@ -230,10 +247,6 @@ public class GameManager : BaseManager<GameManager>
         Achievements = new AchievementFlags();
         Shutdowns = new ShutdownFlags();
         Experiment = new ExperimentFlags();
-        InventorySlots = Inventory.Instance.InventorySlots;
-
-        Day = DaysEnum.SUNDAY;
-        Disaster = ClosureEnum.NONE;
     }
 
     private void Start()
@@ -252,20 +265,30 @@ public class GameManager : BaseManager<GameManager>
             Day = DaysEnum.SUNDAY;
             LastDayHunted = -1;
             Disaster = ClosureEnum.NONE;
+            InventorySlots = Inventory.Instance.InventorySlots;
         }
 
-        StartCoroutine(FadeIn());
+        LevelHandler.Instance.LoadRadioScene();
     }
 
     private void Update()
     {
-        if ( Input.GetKeyDown("space") && !wasAnyKeyPressed )
+        if ( Input.GetKeyDown("space") && isPopUpVisible )
+        {
+            isPopUpVisible = false;
+            MessageObject.SetActive(false);
+        }
+
+        if ( Input.GetKeyDown("space") && LevelHandler.Instance.goalComplete )
         {
             wasAnyKeyPressed = true;
-            if ( goalComplete )
-            {
-                NextDay();
-            }
+            LevelHandler.Instance.NextDay();
+        }
+
+        if ( Input.GetKeyDown(KeyCode.R) )
+        {
+            LevelHandler.Instance.ReloadScene();
+            Inventory.Instance.ClearInventory();
         }
 
         if ( isSkipped ) isSkipped = false;
@@ -275,52 +298,15 @@ public class GameManager : BaseManager<GameManager>
     {
         if (Player)
         {
-            PlayerCharacterInputs inputs = InputManager.Instance.Inputs;
-            Player.TryMove(inputs.MoveInput);
+            Inputs = InputManager.Instance.Inputs;
+            Player.TryMove(Inputs.MoveInput);
         }
     }
 
-    private IEnumerator NewMessage(int icon, string message)
+    private void NewMessage(int icon, string message)
     {
         MessageObject.SetActive(true);
-        IsGamePaused = true;
-
         MessageObject.GetComponent<MessageBoxIcon>().icon = icon;
         MessageObject.GetComponent<MessageBoxIcon>().messageTextMesh.text = message;
-
-        while ( !wasAnyKeyPressed )
-            yield return null;
-
-        wasAnyKeyPressed = false;
-        MessageObject.SetActive(false);
-        IsGamePaused = false;
-    }
-
-    public IEnumerator FadeIn()
-    {
-        WhiteSprite.enabled = true;
-
-        for ( float alpha = 255f; alpha > 0; alpha -= Time.deltaTime * 200f )
-        {
-            alpha = Mathf.Clamp(alpha, 0, 255);
-            WhiteSprite.color = new Color(1, 1, 1, alpha / 255);
-            yield return null;
-        }
-
-        WhiteSprite.enabled = false;
-    }
-
-    public IEnumerator FadeOut()
-    {
-        WhiteSprite.enabled = true;
-
-        for ( float alpha = 0f; alpha < 255; alpha += Time.deltaTime * 200f )
-        {
-            alpha = Mathf.Clamp(alpha, 0, 255);
-            WhiteSprite.color = new Color(0, 0, 0, alpha / 255);
-            yield return null;
-        }
-
-        SceneManager.LoadScene(3);
     }
 }

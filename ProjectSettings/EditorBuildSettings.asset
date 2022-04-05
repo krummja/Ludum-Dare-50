@@ -9,13 +9,31 @@ EditorBuildSettings:
     path: Assets/Ludum-Dare-50/_Levels/Frontend/BootScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/LoganPublic/TestLevels/RadioScene.unity
+    path: Assets/Ludum-Dare-50/_Levels/Frontend/RadioScene.unity
     guid: 0442258040606d546af7f88ab419973b
   - enabled: 1
+    path: Assets/Ludum-Dare-50/_Levels/Frontend/EndOfDay.unity
+    guid: 392a9f2ebc4d2fa49aae88e433e16a40
+  - enabled: 1
+    path: Assets/Ludum-Dare-50/_Levels/Baseball Field.unity
+    guid: 255b91206447bd558ba5f594eae119d1
+  - enabled: 1
+    path: Assets/Ludum-Dare-50/_Levels/Outside of School.unity
+    guid: 6f65a0529a2582380bd0bf1aea7c02e2
+  - enabled: 1
+    path: Assets/Ludum-Dare-50/_Levels/Downtown.unity
+    guid: fa713ffb6db757ef9a17a8609fedc817
+  - enabled: 1
+    path: Assets/Ludum-Dare-50/_Levels/Beach.unity
+    guid: 0559ace4d0ea33454a38738d540a390f
+  - enabled: 1
+    path: Assets/Ludum-Dare-50/_Levels/Utility Room.unity
+    guid: 1a0333bde8b2970219e185e1e17a7a29
+  - enabled: 1
+    path: Assets/Ludum-Dare-50/_Levels/Science Lab.unity
+    guid: 9ffa658a6f86b449b903c248c1d061c9
+  - enabled: 0
     path: Assets/LoganPublic/TestLevels/GameLogicTest.unity
     guid: 94b7dd1d4790b91429eb39a286f399f9
-  - enabled: 1
-    path: Assets/LoganPublic/TestLevels/EndOfDay.unity
-    guid: 392a9f2ebc4d2fa49aae88e433e16a40
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 8110828b0eafea06d99a67a1566e3797, type: 2}

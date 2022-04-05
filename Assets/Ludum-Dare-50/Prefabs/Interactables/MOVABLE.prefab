@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1950920446016903012}
   - component: {fileID: 7837696734966641006}
   m_Layer: 7
-  m_Name: Movable
+  m_Name: MOVABLE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

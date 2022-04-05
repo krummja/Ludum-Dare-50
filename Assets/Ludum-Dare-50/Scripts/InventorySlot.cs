@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Gameplay;
 using UnityEngine;
 
 public class InventorySlot : MonoBehaviour
@@ -12,14 +14,14 @@ public class InventorySlot : MonoBehaviour
     private void Update()
     {
         int i = slot-1;
-            if (Gamestate.inventory[i] == 0)
+            if (Inventory.Instance.InventorySlots[i] == 0)
             {
                 icon.sprite = Items[0];
                 background.sprite = Items[0];
             }
-            if (Gamestate.inventory[i] != 0)
+            if (Inventory.Instance.InventorySlots[i] != 0)
             {
-                icon.sprite = Items[Gamestate.inventory[i]];
+                // icon.sprite = Items[];
                 background.sprite = Items[17];
             }
     }

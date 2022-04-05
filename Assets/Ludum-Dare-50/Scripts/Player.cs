@@ -1,4 +1,5 @@
 using System;
+using Gameplay;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,17 +21,18 @@ public class Player : MonoBehaviour
             if ( Mathf.Abs(target.x) == 1f || Mathf.Abs(target.y) == 1f )
             {
                 Vector3 pos = MovePoint.position + new Vector3(target.x, target.y, 0f);
+
                 if ( Physics2D.OverlapCircle(pos, 0.2f, MovableMask) )
                 {
                     Collider2D collider = Physics2D.OverlapCircle(pos, 0.2f, MovableMask);
                     Movable movable = collider.gameObject.GetComponent<Movable>();
 
-                    movable.TryMove(target);
                     Animator.SetKickState(target);
+                    movable.TryMove(target);
                     AudioManager.Instance.PlaySound("Kick");
                 }
 
-                else if ( !Physics2D.OverlapCircle(pos, 0.2f, StopMovementMask) )
+                 else if ( !Physics2D.OverlapCircle(pos, 0.2f, StopMovementMask) )
                 {
                     GameManager.Instance.DecrementMoves();
                     Animator.SetDashState(target);
@@ -50,15 +52,37 @@ public class Player : MonoBehaviour
         MovePoint.parent = null;
     }
 
+    private void Start()
+    {
+        for ( int i = 0; i < transform.childCount; i++ )
+        {
+            Transform child = transform.GetChild(i);
+
+            switch ( child.gameObject.name )
+            {
+                case "Idle":
+                    Animator.IdleObject = child.gameObject;
+                    break;
+                case "Dash":
+                    Animator.DashObject = child.gameObject;
+                    break;
+                case "Kick":
+                    Animator.KickObject = child.gameObject;
+                    break;
+            }
+        }
+    }
+
     private void FixedUpdate()
     {
+
         transform.position = Vector2.MoveTowards(
             transform.position,
             MovePoint.position,
             MoveSpeed * Time.fixedDeltaTime
         );
 
-        if ( Vector2.Distance(transform.position, MovePoint.position) < 0.05f )
+        if ( Vector2.Distance(transform.position, MovePoint.position) < 0.01f )
             Animator.SetIdleState();
     }
 
